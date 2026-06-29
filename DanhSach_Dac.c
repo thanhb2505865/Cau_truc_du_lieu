@@ -1,6 +1,6 @@
 // Cac ham thuong gap cua DS Don
 #include <stdio.h>
-#define MaxLength 100;
+#define MaxLength 100
 
 typedef int Position;
 typedef float ElemenType;
