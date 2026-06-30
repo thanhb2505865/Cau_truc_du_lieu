@@ -22,7 +22,7 @@ int EMPTLY_QUEUE(Queue Q) { //Dua lam MAKENULL_QUEUE de bic
 }
 
 int FULL_QUEUE(Queue Q) { //Khi hang doi day => Mang day
-    return Q.Rear + 1  //(Q.Rear - Q.Front + 1) == Maxlength chưa tối ưa
+    return Q.Rear + 1; //(Q.Rear - Q.Front + 1) == Maxlength chưa tối ưa
 }
 
 int FRONT(Queue Q) { //Lay phan tu dau tien trong hang doi
