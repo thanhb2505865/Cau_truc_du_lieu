@@ -1,4 +1,4 @@
-// Cac ham thuong gap cua DS Don
+// Thu vien LIST_dac
 #include <stdio.h>
 #define MaxLength 100
 

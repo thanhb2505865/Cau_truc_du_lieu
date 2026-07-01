@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
+// Thu vien List_Lien_Ket
 struct Node {
     int Element;
     struct Node* Next;

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
+// Thu vien QUEUE
 #define Maxlength 1000
 typedef int ElementType;
 
