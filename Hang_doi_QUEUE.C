@@ -5,7 +5,6 @@
 #define Maxlength 1000
 typedef int ElementType;
 
-
 typedef struct {
     ElementType Elements[Maxlength];
     int Front, Rear;
@@ -18,11 +17,11 @@ void MAKENULL_QUEUE(Queue *Q) { //HAM tao queue rong
 }
 
 int EMPTLY_QUEUE(Queue Q) { //Dua lam MAKENULL_QUEUE de bic
-    return Q.Front == -1 & Q.Rear == -1;
+    return Q.Front == -1 && Q.Rear == -1;
 }
 
 int FULL_QUEUE(Queue Q) { //Khi hang doi day => Mang day
-    return Q.Rear + 1; //(Q.Rear - Q.Front + 1) == Maxlength chưa tối ưa
+    return (Q.Rear - Q.Front + 1) == Maxlength; //(Q.Rear - Q.Front + 1) == Maxlength chưa tối ưa
 }
 
 int FRONT(Queue Q) { //Lay phan tu dau tien trong hang doi
@@ -47,8 +46,9 @@ void DEQUEUE(Queue *Q) {
         Q->Front++;
 
     }
-
 }
+
+
 int main() {
     return 0;
 }
