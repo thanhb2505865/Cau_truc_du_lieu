@@ -33,6 +33,17 @@ void INSERT_LIST(int x, Position P, List *L) { // chen x vao vi tri P trong ds L
     P->Next = T;
 }
 
+void INSERT_LIST_LAST(int x, List* L) { // Ham chen x vao cuoi danh sach lien ket don L
+    struct Node* Q = (struct Node*)malloc(sizeof(struct Node));
+    Q->Element = x;
+    Q->Next = NULL;
+    struct Node* q = *L;
+    while(q->Next != NULL) {
+        q = q->Next;
+    }
+    q->Next = Q;
+}
+
 void DELETE_LIST(Position P, List *L) { // Xoa phtu tai vi tri P trong ds L    
     Position T = P;
 
