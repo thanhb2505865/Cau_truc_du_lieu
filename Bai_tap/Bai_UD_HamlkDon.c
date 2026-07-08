@@ -25,6 +25,13 @@ void insertList(int X, struct Node* Q, List *L) {
     Q->Next = T;
 }
 
+void insertFirst(int x, List* L) {
+    struct Node* T = (struct Node*)malloc(sizeof(struct Node));
+    T->Element = x;
+    T->Next = (*L)->Next;
+    (*L)->Next = T;
+}
+
 List readList() {
     int n;
     int i;
@@ -91,7 +98,7 @@ void delete(struct Node* Q, List* L) { // Xoa Q->Next va nhay Q
     else return;
 }
 
-void deleteList(int x, List* L) {
+void deleteList(int x, List* L) {// Xoa di toan x trong List
     struct Node* Q = *L;
     while(Q->Next != NULL) { 
         if (Q->Next->Element == x) {
@@ -102,6 +109,14 @@ void deleteList(int x, List* L) {
         }
         
     }
+}
+
+void delete_strucNode(struct Node* Q, List* L) {// Xoa di Q
+    struct Node* P = *L;
+    while(P->Next != Q) {
+        P = P->Next;
+    }
+    P->Next = Q->Next;
 }
 
 int append(int X, List* L) { // Viet ham de chen x vao ds L neu x da co trong ds L tra ve 0 khong co them x cuoi ds L tra ve 1 
@@ -119,18 +134,32 @@ int append(int X, List* L) { // Viet ham de chen x vao ds L neu x da co trong ds
     }
 }
 
+List read() {
+    int n;
+    int i;
+    scanf("%d", &n);
+    List L;
+    makenullList(&L);
+    struct Node* Q = L;
+    for (i = 0; i < n; i++){
+        int temp;
+        scanf("%d", &temp);
+        if (locate(temp, L)->Next == NULL) { //Luu y ham locate phai tra ve struct Node P->Next nhe 
+            insertList(temp, L, &L);
+        } 
+    }
+    return L;
+}
+
 //Hinh thanh y tuong dung Thuat toan sap xep noi
 // Dung 2 vong for 
 // i = L
 // j = i; tranh truong hop j = (*L)->Next->Next vi j k doi
 // Rui ss lay i dau tien so sanh (kha tu o day)
 void Interchangeshort(List* L) { //C1
-    List result;
-    makenullList(result);
     struct Node* i;
     struct Node* j;
-    struct Node* Q = *L;
-    for (i = Q->Next; i != NULL; i = i->Next) {
+    for (i = (*L)->Next; i != NULL; i = i->Next) {
         for(j = i->Next; j != NULL; j = j->Next) {
             if(i->Element > j->Element) {
                 int temp = j->Element;
@@ -239,7 +268,54 @@ void mergeSortRecursive(struct Node** headRef) {
 }
 
 
+List Intersection(List L_1, List L_2) {
+    List Giao;
+    makenullList(&Giao);
+    if (L_1->Next == NULL || L_2->Next == NULL) {
+        return Giao;
+    }
+    struct Node* L = Giao;
+    struct Node* Q = L_1;
+    while (Q->Next != NULL) {
+        if(locate(Q->Next->Element, L_2)->Next != NULL) {
+            insertList(Q->Next->Element, L, &Giao);
+            L = L->Next;
+        }
+        Q = Q->Next;
+    }
+    return Giao;
+}
+
+List Union(List L_1, List L_2) {
+    if (L_1->Next == NULL) {
+        return L_2;
+    }
+    if (L_2->Next == NULL) {
+        return L_1;
+    }
+    struct Node* Q = L_2;
+    while (Q->Next != NULL) {
+        if(locate(Q->Next->Element, L_1)->Next == NULL) {
+            insertList(Q->Next->Element,locate(Q->Next->Element, L_1) , &L_1);
+        }
+        Q = Q->Next;
+    }
+    return L_1;
+}
+
+List Difference(List L_1, List L_2) {
+    if(L_1->Next == NULL || L_2->Next == NULL) {
+        return L_1;
+    }
+    struct Node* Q = L_1;
+    while (Q->Next != NULL) {
+        if(locate(Q->Next->Element, L_2)->Next != NULL) {
+            deleteList(Q->Next->Element, &L_1);
+        }
+    }
+    return L_1;
+}
+
 int main() {
-    
     return 0;
 }
