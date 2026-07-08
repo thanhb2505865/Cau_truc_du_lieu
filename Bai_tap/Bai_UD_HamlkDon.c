@@ -104,6 +104,140 @@ void deleteList(int x, List* L) {
     }
 }
 
+int append(int X, List* L) { // Viet ham de chen x vao ds L neu x da co trong ds L tra ve 0 khong co them x cuoi ds L tra ve 1 
+    struct Node* Q = locate(X, *L); // locate tra ve vị trí Q->Next = x khong thi tra ve Q->Next == NULL;
+    struct Node* P = (struct Node*)malloc(sizeof(struct Node));
+    P->Element = X;
+    P->Next = NULL;
+    if(Q->Next != NULL) {
+        free(P);
+        return 0;
+    }
+    else {
+        Q->Next = P; //Do khong co nen Q = NULL va cuoi cua ds L rui nen noi vo la dep
+        return 1;
+    }
+}
+
+//Hinh thanh y tuong dung Thuat toan sap xep noi
+// Dung 2 vong for 
+// i = L
+// j = i; tranh truong hop j = (*L)->Next->Next vi j k doi
+// Rui ss lay i dau tien so sanh (kha tu o day)
+void Interchangeshort(List* L) { //C1
+    List result;
+    makenullList(result);
+    struct Node* i;
+    struct Node* j;
+    struct Node* Q = *L;
+    for (i = Q->Next; i != NULL; i = i->Next) {
+        for(j = i->Next; j != NULL; j = j->Next) {
+            if(i->Element > j->Element) {
+                int temp = j->Element;
+                j->Element = i->Element;
+                i->Element = temp;
+            }
+        }
+    }
+}
+
+// Hinh thanh y tuong ss bang dslk don (Có thể dùng hàm min va max trong ds liên kết)
+// Mình sẽ tạo ra một con struct Node sao đó thiệt lặp điều kiện và nối vô cái struct Node đó sao cho nó luôn ở đầu của toa để lấy nó làm mốc đặt đk là bé hơn và nhỏ hơn nó. 
+// B1: tao ra 1 ds dung hon 1 node dau cua 1 ds // struct Node* sorted = NULL;
+// B2: Tao mot toa co lam dau de tranh mat du lieu toa góc // struct Node* current = L->Next;
+// B3: Từ ý tưởng sẽ có 1 toa đầu làm đk ss // sorted đặt đk quanh nó
+//  +TH1: sorted > toa moi thi la nó sẽ toa mới sẽ nối vô nó, xong bỏ sorted vào toa mới thêm vào. có thể nói luôn để min cua toa là sorted 
+//      +TH1: Thêm lần đâu 
+//      +Th2: sorted > toa moi
+//  +TH2: sorted < toa moi thi ta sẽ đặt while chạy từng ptu vao toa moi sao cho nó kiếm tk lớn nhất hiện tại và nối nó vào tk mới vào 
+//      +TH1: Chạy tới cuối 
+//      +TH2: Chạy vừa đủ 
+// B4: Nối toa tàu //L->Next = sorted; 
+void InsertionSort(List L) { // C2
+    struct Node* sorted = NULL; // Danh sách mới đã sắp xếp
+    struct Node* current = L->Next; // Con trỏ duyệt danh sách cũ.
+    
+    while (current != NULL) {
+        struct Node* next = current->Next; // Luu gia tri tiep theo cua toa de truong minh thao lap k mat may toa sao
+        
+        // Tìm vị trí chèn current vào danh sách sorted
+        if (sorted == NULL || sorted->Element >= current->Element) {
+            current->Next = sorted; 
+            sorted = current; 
+        } else {
+            struct Node* p = sorted;
+            while (p->Next != NULL && p->Next->Element < current->Element) {
+                p = p->Next;
+            }
+            current->Next = p->Next;
+            p->Next = current;
+        }
+        current = next; // Tiến tới toa tiếp theo của danh sách cũ. current = 2. current = 9.
+    }
+    L->Next = sorted; // Cập nhật lại đầu tàu chính
+}
+
+//C3 chưa hiểu 8/7 coi
+void splitList(struct Node* source, struct Node** frontRef, struct Node** backRef) {
+    struct Node* fast;
+    struct Node* slow;
+    slow = source;
+    fast = source->Next;
+
+    // Thỏ đi nhanh gấp đôi Rùa
+    while (fast != NULL) {
+        fast = fast->Next;
+        if (fast != NULL) {
+            slow = slow->Next;
+            fast = fast->Next;
+        }
+    }
+
+    // Rùa chính là điểm giữa, chặt đôi tàu ra!
+    *frontRef = source;
+    *backRef = slow->Next;
+    slow->Next = NULL; // Tháo xích để tách làm 2 danh sách độc lập
+}
+
+struct Node* sortedMerge(struct Node* a, struct Node* b) {
+    struct Node* result = NULL;
+
+    // Trường hợp cơ bản: 1 trong 2 danh sách bị rỗng
+    if (a == NULL) return b;
+    if (b == NULL) return a;
+
+    // So sánh Element để chọn toa nhỏ hơn cho vào kết quả
+    if (a->Element <= b->Element) {
+        result = a;
+        result->Next = sortedMerge(a->Next, b); // Đệ quy trộn phần còn lại
+    } else {
+        result = b;
+        result->Next = sortedMerge(a, b->Next); // Đệ quy trộn phần còn lại
+    }
+    return result;
+}
+
+void mergeSortRecursive(struct Node** headRef) {
+    struct Node* head = *headRef;
+    struct Node* a;
+    struct Node* b;
+
+    // Nếu tàu chỉ có 0 hoặc 1 toa thì không cần xếp nữa
+    if ((head == NULL) || (head->Next == NULL)) {
+        return;
+    }
+
+    // 1. Chia tàu thành 2 nửa 'a' và 'b'
+    splitList(head, &a, &b);
+
+    // 2. Đệ quy sắp xếp cho từng nửa
+    mergeSortRecursive(&a);
+    mergeSortRecursive(&b);
+
+    // 3. Trộn 2 nửa đã xếp xong lại với nhau
+    *headRef = sortedMerge(a, b);
+}
+
 
 int main() {
     
