@@ -49,7 +49,6 @@ void PREORDER(Tree T) {
             PREORDER(q);
             q = q->RightSibling;
         }
-
     }
 }
 
