@@ -99,5 +99,6 @@ float getAvg(List L) {
         return -1000000;
     }
 }
+
 int main() {
 }
