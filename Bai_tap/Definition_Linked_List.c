@@ -86,19 +86,6 @@ void removeAll(ElementType x, List* L) {
 	}
 }
 
-
-void normalize(List *L) {
-	struct Node* Q = (*L)->Next;
-	while (Q != NULL) {
-		struct Node* P = Q;
-		while(P->Next->Element != Q->Element) {
-		    P = P->Next;
-		}
-		deleteList(P, L);
-		Q = Q->Next;
-    }
-}
-
 void normalize(List *L) {
 	struct Node* Q = (*L)->Next;
 	while (Q != NULL) {
@@ -152,17 +139,6 @@ float getAvg(List L) {
 	return result / count;
 }
 
-Position locate(ElementType x, List L) {
-    Position P = L;
-    while(P->Next != NULL) {
-        if(P->Next->Element == x) {
-            return P;
-        }
-        P = P->Next;
-    }
-    return P;
-}
-
 int member(ElementType x, List L) {
     return locate(x, L)->Next != NULL;
 }
@@ -178,8 +154,8 @@ List readSet() {
     for(i = 0; i < n; i++) {
         int temp;
         scanf("%d", &temp);
-        if(member(temp, L) == 0) { 
-            addFirst(temp, &L);
+        if(member(temp, *L) == 0) { 
+            addFirst(temp, L);
         }
     }
 }
@@ -256,6 +232,21 @@ void sort(List *L) {
     }
 }
 
+List difference(List L1, List L2) {
+    List L;
+    makenullList(&L);
+    struct Node* Q = L1;
+    struct Node* P = L->Next;
+    while(Q->Next != NULL) {
+        if(locate(Q->Next->Element, L2)->Next == NULL) {
+            insertList(Q->Next->Element, P, &L);
+            P = P->Next;
+        }
+        Q = Q->Next;
+    }
+    return L;
+
+}
 int main() {
 
 	return 0;
