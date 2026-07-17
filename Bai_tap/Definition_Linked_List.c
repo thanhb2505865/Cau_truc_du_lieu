@@ -41,7 +41,7 @@ Position locate(ElementType x, List L) {
 	return P;
 }
 
-void append(ElementType x, List* L) {
+void append(ElementType x, List* L) { // Them vao vi tri cuoi cung cua List neu co thi them k thi thui
 	struct Node* Q = (struct Node*)malloc(sizeof(struct Node));
 	Q->Element = x;
 	Q->Next = NULL;
