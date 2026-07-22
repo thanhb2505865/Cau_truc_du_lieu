@@ -11,12 +11,13 @@ typedef struct {
     int Dinh;
 } NganXep;
 
+
 void khoitao(NganXep *S) {
     S->Dinh = M;
 }
 
-ElementType ktRong(NganXep S) {
-    return S.Dinh == M;
+int ktRong(NganXep S) { // Neu danh sach rong tra ve 1, danh sach k rong tra ve 0;
+    return S.Dinh == M; 
 }
 
 ElementType ktDay(NganXep S) {
@@ -79,8 +80,77 @@ void inThaplucphan(int n) {
     }
 }
 
+int ktChuoi() { // Ngoac dung tra ve 1; khong dung tra ve 0
+    char x[100];
+    fgets(x, sizeof(x), stdin);
+    Stack S;
+    makenullStack(&S);
+    int i = 0;
+    while(x[i] != '\0') {
+        if(x[i] == '(') {
+            push(x[i], &S);
+        }
+        else if(x[i] == ')') {
+            if (emptyStack(S)) { //emptyStack(S) == 1
+                return 0;
+            }
+            else {
+                pop(&S);
+            }
+        }
+        i++;
+    }
+    // Danh sach no phai rong moi dung 
+    return emptyStack(S); //Tre ve 1 
+}
 
+float change_digit(char x) {
+    char digit[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    float i;
+    while(strcmp(digit[i], x) != 0) {
+        i++
+    }
+    return i;
+}
 
+float tinhGiatri(char x[]) {
+    int i = 0;
+    Stack S;
+    makenullStack(&S);
+    while(x[i] != '\0') {
+        push(x[i], &S);
+        if(x[i] == '*') {
+            float number1 = change_digit(top(S));
+            pop(&S);
+            float number2 = change_digit(top(S));
+            pop(&S);
+            push(number1 * number2, &S);
+        }
+        else if(x[i] == '/') {
+            float number1 = change_digit(top(S));
+            pop(&S);
+            float number2 = change_digit(top(S));
+            pop(&S);
+            push(number1 / number2, &S);
+        }
+        else if(x[i] == '+') {
+            float number1 = change_digit(top(S));
+            pop(&S);
+            float number2 = change_digit(top(S));
+            pop(&S);
+            push(number1 + number2, &S);
+        }
+        else if(x[i] == '-') {
+            float number1 = change_digit(top(S));
+            pop(&S);
+            float number2 = change_digit(top(S));
+            pop(&S);
+            push(number1 - number2, &S);
+        }
+        i++;
+    }
+    return top(S);
+} 
 int main() {
     int n;
     scanf("%d",&n);
